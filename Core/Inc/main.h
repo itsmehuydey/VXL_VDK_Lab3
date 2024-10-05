@@ -74,8 +74,8 @@ void Error_Handler(void);
 #define PA6_GPIO_Port GPIOA
 #define PA7_Pin GPIO_PIN_7
 #define PA7_GPIO_Port GPIOA
-#define PB0_Pin GPIO_PIN_0
-#define PB0_GPIO_Port GPIOB
+#define BUTTON_1_Pin GPIO_PIN_0
+#define BUTTON_1_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
