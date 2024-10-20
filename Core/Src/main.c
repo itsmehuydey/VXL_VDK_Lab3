@@ -97,7 +97,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	  fsm_for_input_processing () ;
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -197,23 +197,45 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, PA0_Pin|PA1_Pin|PA2_Pin|PA3_Pin
-                          |PA4_Pin|PA5_Pin|PA6_Pin|PA7_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, red1_Pin|yellow1_Pin|green1_Pin|red2_Pin
+                          |yellow2_Pin|green2_Pin|am00_Pin|am01_Pin
+                          |am02_Pin|am03_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : PA0_Pin PA1_Pin PA2_Pin PA3_Pin
-                           PA4_Pin PA5_Pin PA6_Pin PA7_Pin */
-  GPIO_InitStruct.Pin = PA0_Pin|PA1_Pin|PA2_Pin|PA3_Pin
-                          |PA4_Pin|PA5_Pin|PA6_Pin|PA7_Pin;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, am10_Pin|am11_Pin|am12_Pin|am32_Pin
+                          |am33_Pin|mode0_Pin|mode1_Pin|mode2_Pin
+                          |mode3_Pin|am13_Pin|am20_Pin|am21_Pin
+                          |am22_Pin|am23_Pin|am30_Pin|am31_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : red1_Pin yellow1_Pin green1_Pin red2_Pin
+                           yellow2_Pin green2_Pin am00_Pin am01_Pin
+                           am02_Pin am03_Pin */
+  GPIO_InitStruct.Pin = red1_Pin|yellow1_Pin|green1_Pin|red2_Pin
+                          |yellow2_Pin|green2_Pin|am00_Pin|am01_Pin
+                          |am02_Pin|am03_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : BUTTON_1_Pin */
-  GPIO_InitStruct.Pin = BUTTON_1_Pin;
+  /*Configure GPIO pins : am10_Pin am11_Pin am12_Pin am32_Pin
+                           am33_Pin mode0_Pin mode1_Pin mode2_Pin
+                           mode3_Pin am13_Pin am20_Pin am21_Pin
+                           am22_Pin am23_Pin am30_Pin am31_Pin */
+  GPIO_InitStruct.Pin = am10_Pin|am11_Pin|am12_Pin|am32_Pin
+                          |am33_Pin|mode0_Pin|mode1_Pin|mode2_Pin
+                          |mode3_Pin|am13_Pin|am20_Pin|am21_Pin
+                          |am22_Pin|am23_Pin|am30_Pin|am31_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : button0_Pin button1_Pin button2_Pin */
+  GPIO_InitStruct.Pin = button0_Pin|button1_Pin|button2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(BUTTON_1_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 }
 

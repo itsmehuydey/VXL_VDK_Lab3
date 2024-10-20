@@ -1,46 +1,50 @@
-#include "main.h"
+#include "input_reading.h"
 
-// Chúng ta muốn làm việc với nhiều hơn một nút bấm
-#define N0_OF_BUTTONS 1
+#define N0_OF_BUTTONS 3              // Number of buttons used
+#define BUTTON_IS_PRESSED GPIO_PIN_SET   // Button pressed state (high)
+#define BUTTON_IS_RELEASED GPIO_PIN_RESET // Button released state (low)
 
-// Thời gian ngắt timer là 10ms, vì vậy để đạt 1 giây,
-// chúng ta cần nhảy vào hàm xử lý ngắt 100 lần
+// GPIO pin definitions for each button
+#define BUTTON_PIN_0 GPIO_PIN_9   // Button 0 assigned to pin 9
+#define BUTTON_PIN_1 GPIO_PIN_10  // Button 1 assigned to pin 10
+#define BUTTON_PIN_2 GPIO_PIN_11  // Button 2 assigned to pin 11
+
+
+// timer interrupt duration is 10ms, so to pass 1 second,
+// we need to jump to the interrupt service routine 100 times
 #define DURATION_FOR_AUTO_INCREASING 100
+//
 
-#define BUTTON_IS_PRESSED GPIO_PIN_RESET
-#define BUTTON_IS_RELEASED GPIO_PIN_SET
-
-// Bộ đệm lưu trữ kết quả cuối cùng sau khi debounce
+// the buffer where the final result is stored after debouncing
 static GPIO_PinState buttonBuffer[N0_OF_BUTTONS];
-
-// Chúng ta định nghĩa hai bộ đệm cho debounce
-static GPIO_PinState debounceButtonBuffer1[N0_OF_BUTTONS];
-static GPIO_PinState debounceButtonBuffer2[N0_OF_BUTTONS];
-
-// Cờ cho biết nút bấm được nhấn hơn 1 giây
+// we define two buffers for debouncing
+static GPIO_PinState debounceButtonBuffer1 [ N0_OF_BUTTONS ] =
+{ BUTTON_IS_RELEASED , BUTTON_IS_RELEASED };
+static GPIO_PinState debounceButtonBuffer2 [ N0_OF_BUTTONS ] =
+{ BUTTON_IS_RELEASED , BUTTON_IS_RELEASED };
+uint16_t arrayPIN [ N0_OF_BUTTONS ] = { BUTTON_PIN_0 ,
+BUTTON_PIN_1 , BUTTON_PIN_2 };
 static uint8_t flagForButtonPress1s[N0_OF_BUTTONS];
-
-// Bộ đếm để tự động tăng giá trị
-// sau khi nút được nhấn hơn 1 giây
+// we define a counter for automatically increasing the value
+// after the button is pressed more than 1 second
 static uint16_t counterForButtonPress1s[N0_OF_BUTTONS];
 
 void button_reading(void) {
-    for (char i = 0; i < N0_OF_BUTTONS; i++) {
+    for (int i = 0; i < N0_OF_BUTTONS; i++) {
         debounceButtonBuffer2[i] = debounceButtonBuffer1[i];
-        debounceButtonBuffer1[i] = HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin);
+        debounceButtonBuffer1[i] = HAL_GPIO_ReadPin(button1_GPIO_Port, button1_Pin);
 
-        if (debounceButtonBuffer1[i] == debounceButtonBuffer2[i]) {
+        if (debounceButtonBuffer1[i] == debounceButtonBuffer2[i])
             buttonBuffer[i] = debounceButtonBuffer1[i];
-        }
 
         if (buttonBuffer[i] == BUTTON_IS_PRESSED) {
-            // Nếu nút được nhấn, bắt đầu đếm
             if (counterForButtonPress1s[i] < DURATION_FOR_AUTO_INCREASING) {
                 counterForButtonPress1s[i]++;
             } else {
-                // Cờ được bật khi đã 1 giây kể từ khi nút được nhấn
+                // the flag is turned on when 1 second has passed
+                // since the button is pressed
                 flagForButtonPress1s[i] = 1;
-                // TODO: Thêm chức năng cần thiết tại đây
+                // todo
             }
         } else {
             counterForButtonPress1s[i] = 0;

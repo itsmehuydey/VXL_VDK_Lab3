@@ -5,7 +5,7 @@
  *      Author: pc
  */
 
-#include "main.h"
+#include "timer.h"
 #include "input_reading.h"
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
 {
