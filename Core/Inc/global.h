@@ -7,7 +7,7 @@
 
 #ifndef INC_GLOBAL_H_
 #define INC_GLOBAL_H_
-#include "main.h"
+
 #include "input_processing.h"
 #include "input_reading.h"
 #include "led_display.h"

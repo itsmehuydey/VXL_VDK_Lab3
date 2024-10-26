@@ -1,4 +1,4 @@
-#include "led_display.h"
+#include "global.h"
 
 void displayLED_YELLOW(int IS_ON, int index) {
     switch (index) {
@@ -43,7 +43,6 @@ void displayLED7SEG_LEFT(int number) {
     int divPart = number / 10;
     int modPart = number % 10;
 
-    // CONVERT TO BINARY
     int arr_1[4] = {0, 0, 0, 0};
     int arr_2[4] = {0, 0, 0, 0};
 
@@ -92,7 +91,6 @@ void displayLED7SEG_TOP(int number) {
 }
 
 void displayLED7SEG_MODE(int number) {
-    // CONVERT TO BINARY
     int arr[4] = {0, 0, 0, 0};
     for (int i = 3; i >= 0; --i) {
         arr[i] = number % 2;

@@ -4,7 +4,7 @@
  *  Created on: Oct 4, 2024
  *      Author: pc
  */
-#include "global.h"
+#include "main.h"
 # ifndef INC_INPUT_PROCESSING_H_
  # define INC_INPUT_PROCESSING_H_
 void fsm_for_input_processing ( void ) ;

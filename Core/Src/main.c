@@ -97,11 +97,11 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-//	  fsm_for_input_processing () ;
-	  fsm1_automatic_run();
-	  fsm2_automatic_run();
-	  fsm_modify_timer_control();
-	  update7Segment();
+	  fsm_for_input_processing () ;
+//	  fsm1_automatic_run();
+//	  fsm2_automatic_run();
+//	  fsm_modify_timer_control();
+//	  update7Segment();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -271,10 +271,10 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-	timerRun();
-	button_reading();
-}
+//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+//	timerRun();
+//	button_reading();
+//}
 /* USER CODE END 4 */
 
 /**
