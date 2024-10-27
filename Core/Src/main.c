@@ -275,6 +275,62 @@ static void MX_GPIO_Init(void)
 //	timerRun();
 //	button_reading();
 //}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+    if(htim->Instance == TIM2) {
+        button_reading();
+        if(flagInteruptLED_and_SEG == 1) {
+            runTimer_LED();
+        } else {
+            if(MAX_COUNTER_IN_MODE_2_3_4 <= 0) {
+                MAX_COUNTER_IN_MODE_2_3_4 = 500 / 10;
+                counter_mode_2_3_4 = MAX_COUNTER_IN_MODE_2_3_4;
+            }
+            if(flagMode_RED_BLINK == 1) {
+                if(counter_mode_2_3_4 <= 0) {
+                    counter_mode_2_3_4 = MAX_COUNTER_IN_MODE_2_3_4;
+                } else {
+                    if(counter_mode_2_3_4 == MAX_COUNTER_IN_MODE_2_3_4 / 2) {
+                        flagRed[0] = 0;
+                        flagRed[1] = 0;
+                    } else if(counter_mode_2_3_4 == MAX_COUNTER_IN_MODE_2_3_4) {
+                        flagRed[0] = 1;
+                        flagRed[1] = 1;
+                    }
+                    --counter_mode_2_3_4;
+                }
+            }
+            if(flagMode_GREEN_BLINK == 1) {
+                if(counter_mode_2_3_4 <= 0) {
+                    counter_mode_2_3_4 = MAX_COUNTER_IN_MODE_2_3_4;
+                } else {
+                    if(counter_mode_2_3_4 == MAX_COUNTER_IN_MODE_2_3_4 / 2) {
+                        flagGreen[0] = 0;
+                        flagGreen[1] = 0;
+                    } else if(counter_mode_2_3_4 == MAX_COUNTER_IN_MODE_2_3_4) {
+                        flagGreen[0] = 1;
+                        flagGreen[1] = 1;
+                    }
+                    --counter_mode_2_3_4;
+                }
+            }
+            if(flagMode_YELLOW_BLINK) {
+                if(counter_mode_2_3_4 <= 0) {
+                    counter_mode_2_3_4 = MAX_COUNTER_IN_MODE_2_3_4;
+                } else {
+                    if(counter_mode_2_3_4 == MAX_COUNTER_IN_MODE_2_3_4 / 2) {
+                        flagYellow[0] = 0;
+                        flagYellow[1] = 0;
+                    } else if(counter_mode_2_3_4 == MAX_COUNTER_IN_MODE_2_3_4) {
+                        flagYellow[0] = 1;
+                        flagYellow[1] = 1;
+                    }
+                    --counter_mode_2_3_4;
+                }
+            }
+        }
+    }
+}
 /* USER CODE END 4 */
 
 /**
