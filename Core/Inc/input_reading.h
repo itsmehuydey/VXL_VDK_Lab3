@@ -5,9 +5,9 @@
 
 
 #include "main.h"
-#define RED_LIGHT    5      // Thời gian mặc định là 10 giây
-#define GREEN_LIGHT  3      // Thời gian mặc định là 6 giây
-#define YELLOW_LIGHT 2      // Thời gian mặc định là 4 giây
+#define RED_LIGHT    5
+#define GREEN_LIGHT  3
+#define YELLOW_LIGHT 2
 
 // Các biến lưu trạng thái và bộ đếm của đèn giao thông
 extern int vertical_state;         // Trạng thái hiện tại của đèn giao thông dọc (RED, GREEN, YELLOW)
@@ -30,14 +30,14 @@ extern int vertical_counter;
 extern int horizontal_state;
 extern int horizontal_counter;
 
-// Số lượng nút bấm
+
 #define NUM_OF_BUTTONS 3
-#define RELEASED 0
-#define PRESSED 1
+#define RELEASED 1
+#define PRESSED 0
 #define HOLDED 2
 #define COUNT_500MS 50
 #define COUNT_1S 100
-// Khai báo các biến
+
 GPIO_TypeDef *portBuffer[NUM_OF_BUTTONS];  // Mảng lưu cổng GPIO của mỗi nút
 uint16_t pinBuffer[NUM_OF_BUTTONS];         // Mảng lưu chân pin của mỗi nút
 

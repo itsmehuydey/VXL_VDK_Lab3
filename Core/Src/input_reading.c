@@ -1,25 +1,19 @@
 #include "input_reading.h"
 
+int value_high;
+int value_low;
 
-// Các biến lưu trạng thái và bộ đếm của đèn giao thông
-int vertical_state;         // Trạng thái hiện tại của đèn giao thông dọc (RED, GREEN, YELLOW)
-int vertical_counter;       // Bộ đếm thời gian cho đèn giao thông dọc
+int vertical_state  = 3;
+int vertical_counter = 3;
 
-int horizontal_state;       // Trạng thái hiện tại của đèn giao thông ngang (RED, GREEN, YELLOW)
-int horizontal_counter;     // Bộ đếm thời gian cho đèn giao thông ngang
+int horizontal_state = 5;
+int horizontal_counter = 5;
 
-// Biến hiển thị giá trị trên LED 7 đoạn
-int value_high;             // Giá trị cao (hàng chục) của biến `value`
-int value_low;              // Giá trị thấp (hàng đơn vị) của biến `value`
+int red_time = 5;
+int green_time = 3;
+int yellow_time= 2;
 
-// Các biến thời gian cho đèn giao thông
-int red_time = 5;               // Thời gian cho đèn đỏ
-int green_time = 3;             // Thời gian cho đèn xanh
-int yellow_time= 2;            // Thời gian cho đèn vàng
-
-int flag_1s;                // Cờ để gọi `traffic_func()` mỗi 1 giây
-int flag_500ms;             // Cờ để nhấp nháy LED mỗi 500ms
-// Khai báo các biến
+int flag_1s = 0, flag_500ms = 0;
 GPIO_TypeDef *portBuffer[NUM_OF_BUTTONS];
 uint16_t pinBuffer[NUM_OF_BUTTONS];
 
@@ -61,68 +55,7 @@ void readButton_preprocess(void){
 }
 
 
-void readButton(void){
-    for (int i = 0; i < NUM_OF_BUTTONS; i++){
-        lastButton[i] = thisButton[i];
-        thisButton[i] = HAL_GPIO_ReadPin(portBuffer[i], pinBuffer[i]);
 
-        if(thisButton[i] == lastButton[i]){     // it is not a debounce
-            switch (buttonBuffer[i]){
-            case RELEASED:
-                buttonBuffer[i] = thisButton[i];
-                break;
-
-            case PRESSED:
-                if(thisButton[i] == PRESSED){
-                	// Todo when button is pressed
-                	if(i==0 && buttonCounter[0] == 0){
-                		flag_reset = 1;
-                		value = 1;
-                		mode ++;			// first button
-                	}
-                	else if(i == 1 && buttonCounter[1] == 0) value ++;	// second counter
-                	else if(i == 2 && buttonCounter[2] == 0) flag_set = 1;
-
-                	// Button reading
-                    if(buttonCounter[i] >= COUNT_1S){
-                        buttonCounter[i] = 0;
-                        buttonBuffer[i] = HOLDED;
-                        break;
-                    }
-                    buttonCounter[i]++;
-                }
-                else if(thisButton[i] == RELEASED) {
-                	buttonCounter[i] = 0;
-                	buttonBuffer[i] = RELEASED;
-                }
-                break;
-
-            case HOLDED:
-            	// Todo when button is holded
-            	if(i == 1){		// for button 2
-                	if(buttonCounter_500ms >= COUNT_500MS){
-                		buttonCounter_500ms = 0;
-                		value ++;
-                	}
-                	buttonCounter_500ms ++;
-
-                	if(thisButton[i] == RELEASED) {
-                		buttonCounter_500ms = 0;
-                		buttonBuffer[i] = RELEASED;
-                	}
-                	break;
-            	}
-
-            	// other button
-                if(thisButton[i] == RELEASED) buttonBuffer[i] = RELEASED;
-                break;
-
-            default:
-                break;
-            }
-        }
-    }
-}
 
 int getButton(int index){
 	if(index >= NUM_OF_BUTTONS) return -1;
@@ -161,7 +94,7 @@ void display7SEG (int num, GPIO_TypeDef* type, uint16_t A, uint16_t B, uint16_t 
 		break;
 	case 6:
 		HAL_GPIO_WritePin(type, D|A, RESET);
-		HAL_GPIO_WritePin(type, C|B, SET);
+		HAL_GPIO_WritePin(type, B|C, SET);
 		break;
 	case 7:
 		HAL_GPIO_WritePin(type, D, RESET);
@@ -302,24 +235,87 @@ void resetPin(void){
 }
 
 
+void readButton(void) {
+    for (int i = 0; i < NUM_OF_BUTTONS; i++) {
+        lastButton[i] = thisButton[i];
+        thisButton[i] = HAL_GPIO_ReadPin(portBuffer[i], pinBuffer[i]);
+
+        if (thisButton[i] == lastButton[i]) {  // Đảm bảo không bị nhiễu do debounce
+            switch (buttonBuffer[i]) {
+                case RELEASED:
+                    buttonBuffer[i] = thisButton[i];
+                    break;
+
+                case PRESSED:
+                    if (thisButton[i] == PRESSED) {
+                        if (i == 0 && buttonCounter[0] == 0) {
+                            flag_reset = 1;
+                            value = 0;
+                            mode++;
+                        } else if (i == 1 && buttonCounter[1] == 0) {  // Button 2
+                            value++;
+                            if (value > 10) value = 1;
+                        } else if (i == 2 && buttonCounter[2] == 0) flag_set = 1;
+
+                        if (buttonCounter[i] <= 50) {
+                        	buttonCounter[i]++;
+                        }
+                        else {
+                        	buttonCounter[i] = 0;
+                        	//value++;
+                            break;
+                        }
+
+                    } else {
+                        buttonCounter[i] = 0;
+                        buttonBuffer[i] = RELEASED;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+}
 
 
+//void button_reading(void) {
+//    for (char i = 0; i < N0_OF_BUTTONS; i++) {
+//        debounceButtonBuffer2[i] = debounceButtonBuffer1[i];
+//        debounceButtonBuffer1[i] = HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin);
+//
+//        if (debounceButtonBuffer1[i] == debounceButtonBuffer2[i])
+//            buttonBuffer[i] = debounceButtonBuffer1[i];
+//
+//        if (buttonBuffer[i] == BUTTON_IS_PRESSED) {
+//            if (counterForButtonPress1s[i] < DURATION_FOR_AUTO_INCREASING) {
+//                counterForButtonPress1s[i]++;
+//            } else {
+//                flagForButtonPress1s[i] = 1;
+//                // todo
+//            }
+//        } else {
+//            counterForButtonPress1s[i] = 0;
+//            flagForButtonPress1s[i] = 0;
+//        }
+//    }
+//}
 
 int value_high;
 int value_low;
 void fsm_input_processing(void){
-	// show mode on 7SEG
+
 	display7SEG(mode, GPIOB, GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_6, GPIO_PIN_7);
 
 	switch(mode){
-	case 1:		// traffic light
-		if(flag_1s) {	//call every 1s
+	case 1:
+		if(flag_1s) {
 			traffic_func();
 			flag_1s = 0;
 		}
 		break;
-	case 2:		// modify red time
-		// show value on 7SEG
+	case 2:
 		value_high = value/10;
 		value_low = value%10;
 		display7SEG(value_high, GPIOA, GPIO_PIN_8,
@@ -335,22 +331,19 @@ void fsm_input_processing(void){
 		display7SEG(red_time_low, GPIOA, GPIO_PIN_4, GPIO_PIN_5,
 				 GPIO_PIN_6, GPIO_PIN_7);
 
-		// blink red led
 		if(flag_500ms){
 			flag_500ms = 0;
 			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
 			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_11);
 		}
 
-		// enter set button
-		if(flag_set){
+		if(flag_set == 1){
 			flag_set = 0;
 			red_time = value;
 		}
 		break;
 
-	case 3:		// modify green time
-		// show value on 7SEG
+	case 3:
 		value_high = value/10;
 		value_low = value%10;
 		display7SEG(value_high, GPIOA, GPIO_PIN_8,
@@ -380,8 +373,7 @@ void fsm_input_processing(void){
 		}
 		break;
 
-	case 4:		// modify yellow time
-		// show value on 7SEG
+	case 4:
 		value_high = value/10;
 		value_low = value%10;
 		display7SEG(value_high, GPIOA, GPIO_PIN_8,
@@ -397,14 +389,13 @@ void fsm_input_processing(void){
 		display7SEG(yellow_time_low, GPIOA, GPIO_PIN_4, GPIO_PIN_5,
 				 GPIO_PIN_6, GPIO_PIN_7);
 
-		// blink red led
+
 		if(flag_500ms){
 			flag_500ms = 0;
 			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_10);
 			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_13);
 		}
 
-		// enter set button
 		if(flag_set){
 			flag_set = 0;
 			yellow_time = value;
@@ -419,27 +410,21 @@ void fsm_input_processing(void){
 void setTime(){
 	vertical_state = GREEN_LIGHT;
 	vertical_counter = green_time;
-
 	horizontal_state = RED_LIGHT;
 	horizontal_counter = red_time;
 }
 
 void preprocess(){
 	mode = 1;
-	value = 1;
-
+	value = 0;
 	red_time = 5;
 	green_time = 3;
 	yellow_time = 2;
-
 	setTime();
-
-
 	flag_set = 0;
 	flag_1s = 0;
 	flag_500ms = 0;
 	flag_reset = 0;
-
 	readButton_preprocess();
 }
 

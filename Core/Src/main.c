@@ -110,28 +110,22 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   preprocess();
-     setTime();
+  setTime(100);
   while (1)
   {
           if (flag_set == 1)
-              HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, RESET);
-          else
-              HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, SET);
-
+        	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
 
           if (mode > 4) {
               mode = 1;
               setTime();
           }
-          if (value > 10) value = 1;
 
           if (flag_reset) {
               resetPin();
               flag_reset = 0;
-              value = 1;
+              value = 0;
           }
-
-
           fsm_input_processing();
       }
   /* USER CODE END 3 */
