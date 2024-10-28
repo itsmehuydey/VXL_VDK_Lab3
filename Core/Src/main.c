@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "global.h"
+#include "input_reading.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,7 +56,22 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+//int timerLED_counter = 0;
+//int timerLED_flag = 0;
+//
+//void setTimer_LED(int duration) {
+//    timerLED_counter = duration / 10;
+//    timerLED_flag = 0;
+//}
+//
+//void runTimer_LED() {
+//    if(timerLED_counter > 0) {
+//        timerLED_counter--;
+//        if(timerLED_counter == 0) {
+//            timerLED_flag = 1;
+//        }
+//    }
+//}
 /* USER CODE END 0 */
 
 /**
@@ -94,45 +109,33 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  preprocess();
+     setTime();
   while (1)
   {
-    /* USER CODE END WHILE */
-	  fsm_for_input_processing () ;
-//	  fsm1_automatic_run();
-//	  fsm2_automatic_run();
-//	  fsm_modify_timer_control();
-//	  update7Segment();
-    /* USER CODE BEGIN 3 */
-  }
+          if (flag_set == 1)
+              HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, RESET);
+          else
+              HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, SET);
+
+
+          if (mode > 4) {
+              mode = 1;
+              setTime();
+          }
+          if (value > 10) value = 1;
+
+          if (flag_reset) {
+              resetPin();
+              flag_reset = 0;
+              value = 1;
+          }
+
+
+          fsm_input_processing();
+      }
   /* USER CODE END 3 */
 }
-
-
-//Cấu trúc file main.c
-//void main(){
-//
-//
-//	while(1){
-//		fsm_automatic();
-//		fsm_manual();
-//		fsm_setting();
-//	}
-//}
-//
-//void timer_isr(){ //10ms
-//	timerRun();
-//	getKeyInput();
-//}
-//
-//Các module sẽ hiện thực thêm
-//global.h .c
-//software_timer.h .c
-//button.h .c
-//traffic_light.h.c
-//led7_segment.h.c
-//fsm_automatic.h.c
-//fsm_manual.h.c
-//fsm_setting.h.c
 
 /**
   * @brief System Clock Configuration
@@ -228,108 +231,64 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, red1_Pin|yellow1_Pin|green1_Pin|red2_Pin
-                          |yellow2_Pin|green2_Pin|am00_Pin|am01_Pin
-                          |am02_Pin|am03_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, A0_Pin|A1_Pin|A2_Pin|A3_Pin
+                          |A4_Pin|A5_Pin|A6_Pin|A7_Pin
+                          |A8_Pin|A9_Pin|A10_Pin|A11_Pin
+                          |A12_Pin|A13_Pin|A14_Pin|A15_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, am10_Pin|am11_Pin|am12_Pin|am32_Pin
-                          |am33_Pin|mode0_Pin|mode1_Pin|mode2_Pin
-                          |mode3_Pin|am13_Pin|am20_Pin|am21_Pin
-                          |am22_Pin|am23_Pin|am30_Pin|am31_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, B0_Pin|B10_Pin|B11_Pin|B12_Pin
+                          |b13_Pin|B4_Pin|B5_Pin|B6_Pin
+                          |B7_Pin|B8_Pin|B9_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : red1_Pin yellow1_Pin green1_Pin red2_Pin
-                           yellow2_Pin green2_Pin am00_Pin am01_Pin
-                           am02_Pin am03_Pin */
-  GPIO_InitStruct.Pin = red1_Pin|yellow1_Pin|green1_Pin|red2_Pin
-                          |yellow2_Pin|green2_Pin|am00_Pin|am01_Pin
-                          |am02_Pin|am03_Pin;
+  /*Configure GPIO pins : A0_Pin A1_Pin A2_Pin A3_Pin
+                           A4_Pin A5_Pin A6_Pin A7_Pin
+                           A8_Pin A9_Pin A10_Pin A11_Pin
+                           A12_Pin A13_Pin A14_Pin A15_Pin */
+  GPIO_InitStruct.Pin = A0_Pin|A1_Pin|A2_Pin|A3_Pin
+                          |A4_Pin|A5_Pin|A6_Pin|A7_Pin
+                          |A8_Pin|A9_Pin|A10_Pin|A11_Pin
+                          |A12_Pin|A13_Pin|A14_Pin|A15_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : am10_Pin am11_Pin am12_Pin am32_Pin
-                           am33_Pin mode0_Pin mode1_Pin mode2_Pin
-                           mode3_Pin am13_Pin am20_Pin am21_Pin
-                           am22_Pin am23_Pin am30_Pin am31_Pin */
-  GPIO_InitStruct.Pin = am10_Pin|am11_Pin|am12_Pin|am32_Pin
-                          |am33_Pin|mode0_Pin|mode1_Pin|mode2_Pin
-                          |mode3_Pin|am13_Pin|am20_Pin|am21_Pin
-                          |am22_Pin|am23_Pin|am30_Pin|am31_Pin;
+  /*Configure GPIO pins : B0_Pin B10_Pin B11_Pin B12_Pin
+                           b13_Pin B4_Pin B5_Pin B6_Pin
+                           B7_Pin B8_Pin B9_Pin */
+  GPIO_InitStruct.Pin = B0_Pin|B10_Pin|B11_Pin|B12_Pin
+                          |b13_Pin|B4_Pin|B5_Pin|B6_Pin
+                          |B7_Pin|B8_Pin|B9_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : button0_Pin button1_Pin button2_Pin */
-  GPIO_InitStruct.Pin = button0_Pin|button1_Pin|button2_Pin;
+  /*Configure GPIO pins : B1_Pin B2_Pin B3_Pin */
+  GPIO_InitStruct.Pin = B1_Pin|B2_Pin|B3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 
 /* USER CODE BEGIN 4 */
-//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-//	timerRun();
-//	button_reading();
-//}
-
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-    if(htim->Instance == TIM2) {
-        button_reading();
-        if(flagInteruptLED_and_SEG == 1) {
-            runTimer_LED();
-        } else {
-            if(MAX_COUNTER_IN_MODE_2_3_4 <= 0) {
-                MAX_COUNTER_IN_MODE_2_3_4 = 500 / 10;
-                counter_mode_2_3_4 = MAX_COUNTER_IN_MODE_2_3_4;
-            }
-            if(flagMode_RED_BLINK == 1) {
-                if(counter_mode_2_3_4 <= 0) {
-                    counter_mode_2_3_4 = MAX_COUNTER_IN_MODE_2_3_4;
-                } else {
-                    if(counter_mode_2_3_4 == MAX_COUNTER_IN_MODE_2_3_4 / 2) {
-                        flagRed[0] = 0;
-                        flagRed[1] = 0;
-                    } else if(counter_mode_2_3_4 == MAX_COUNTER_IN_MODE_2_3_4) {
-                        flagRed[0] = 1;
-                        flagRed[1] = 1;
-                    }
-                    --counter_mode_2_3_4;
-                }
-            }
-            if(flagMode_GREEN_BLINK == 1) {
-                if(counter_mode_2_3_4 <= 0) {
-                    counter_mode_2_3_4 = MAX_COUNTER_IN_MODE_2_3_4;
-                } else {
-                    if(counter_mode_2_3_4 == MAX_COUNTER_IN_MODE_2_3_4 / 2) {
-                        flagGreen[0] = 0;
-                        flagGreen[1] = 0;
-                    } else if(counter_mode_2_3_4 == MAX_COUNTER_IN_MODE_2_3_4) {
-                        flagGreen[0] = 1;
-                        flagGreen[1] = 1;
-                    }
-                    --counter_mode_2_3_4;
-                }
-            }
-            if(flagMode_YELLOW_BLINK) {
-                if(counter_mode_2_3_4 <= 0) {
-                    counter_mode_2_3_4 = MAX_COUNTER_IN_MODE_2_3_4;
-                } else {
-                    if(counter_mode_2_3_4 == MAX_COUNTER_IN_MODE_2_3_4 / 2) {
-                        flagYellow[0] = 0;
-                        flagYellow[1] = 0;
-                    } else if(counter_mode_2_3_4 == MAX_COUNTER_IN_MODE_2_3_4) {
-                        flagYellow[0] = 1;
-                        flagYellow[1] = 1;
-                    }
-                    --counter_mode_2_3_4;
-                }
-            }
-        }
+int counter_1s = 0;
+int counter_500ms = 0;
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    readButton();
+    if (counter_1s >= 100) {
+        counter_1s = 0;
+        flag_1s = 1;
     }
+    counter_1s++;
+    if (counter_500ms >= 50) {
+        counter_500ms = 0;
+        flag_500ms = 1;
+    }
+    counter_500ms++;
 }
 /* USER CODE END 4 */
 

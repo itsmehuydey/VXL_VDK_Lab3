@@ -1,69 +1,79 @@
-/*
- * global.h
- *
- *  Created on: Oct 20, 2024
- *      Author: pc
- */
-
 #ifndef INC_GLOBAL_H_
 #define INC_GLOBAL_H_
 
-#include "input_processing.h"
+#include "main.h"
+//#include "timer.h"
 #include "input_reading.h"
-#include "led_display.h"
-#include "timer.h"
+//#include "led_display.h"
+#include "input_processing.h"
+//#include "led_display.h"
 
 
+#define RED_LIGHT    2      // Thời gian mặc định là 10 giây
+#define GREEN_LIGHT  3      // Thời gian mặc định là 6 giây
+#define YELLOW_LIGHT 4      // Thời gian mặc định là 4 giây
 
+// Các biến lưu trạng thái và bộ đếm của đèn giao thông
+int vertical_state;         // Trạng thái hiện tại của đèn giao thông dọc (RED, GREEN, YELLOW)
+int vertical_counter;       // Bộ đếm thời gian cho đèn giao thông dọc
 
-#define N0_OF_BUTTONS 3
-#define BUTTON_IS_PRESSED GPIO_PIN_SET
-#define BUTTON_IS_RELEASED GPIO_PIN_RESET
-#define BUTTON_PIN_0 GPIO_PIN_9
-#define BUTTON_PIN_1 GPIO_PIN_10
-#define BUTTON_PIN_2 GPIO_PIN_11
+int horizontal_state;       // Trạng thái hiện tại của đèn giao thông ngang (RED, GREEN, YELLOW)
+int horizontal_counter;     // Bộ đếm thời gian cho đèn giao thông ngang
 
-#define PORTYPE_A GPIOA
-#define PORTYPE_B GPIOB
+// Biến hiển thị giá trị trên LED 7 đoạn
+int value_high;             // Giá trị cao (hàng chục) của biến `value`
+int value_low;              // Giá trị thấp (hàng đơn vị) của biến `value`
 
-#define PIN_RED_1 GPIO_PIN_3      // PORT A
-#define PIN_GREEN_1 GPIO_PIN_4    // PORT A
-#define PIN_YELLOW_1 GPIO_PIN_5   // PORT A
-#define PIN_RED_2 GPIO_PIN_6      // PORT A
-#define PIN_GREEN_2 GPIO_PIN_7    // PORT A
-#define PIN_YELLOW_2 GPIO_PIN_8   // PORT A
+// Các biến thời gian cho đèn giao thông
+int red_time;               // Thời gian cho đèn đỏ
+int green_time;             // Thời gian cho đèn xanh
+int yellow_time;            // Thời gian cho đèn vàng
 
-//BUTTON
+// Các biến điều khiển và chế độ
+int mode;                   // Chế độ hiện tại (1: điều khiển đèn giao thông, 2: chỉnh thời gian đỏ, 3: xanh, 4: vàng)
+int value;                  // Giá trị thời gian đang chỉnh sửa cho đèn giao thông (dùng để cập nhật `red_time`, `green_time`, hoặc `yellow_time`)
 
+// Các biến cờ cho sự kiện
+int flag_set;               // Cờ để xác nhận thay đổi thời gian
+int flag_1s;                // Cờ để gọi `traffic_func()` mỗi 1 giây
+int flag_500ms;             // Cờ để nhấp nháy LED mỗi 500ms
+int flag_reset;             // Cờ reset hệ thống
 
-// SEGMENT [0]
-#define PIN_INP_SEG0_0 GPIO_PIN_12 // PORT A
-#define PIN_INP_SEG0_1 GPIO_PIN_13 // PORT A
-#define PIN_INP_SEG0_2 GPIO_PIN_14 // PORT A
-#define PIN_INP_SEG0_3 GPIO_PIN_15 // PORT A
+// Định nghĩa các hằng số khác
+#define COUNT_1S    100     // Số lần đếm tương ứng với 1 giây
+#define COUNT_500MS 50      // Số lần đếm tương ứng với 500ms
 
-// SEGMENT [1]
-#define PIN_INP_SEG1_0 GPIO_PIN_0  // PORT B
-#define PIN_INP_SEG1_1 GPIO_PIN_1  // PORT B
-#define PIN_INP_SEG1_2 GPIO_PIN_2  // PORT B
-#define PIN_INP_SEG1_3 GPIO_PIN_3  // PORT B
+#define RED_LIGHT		2	// default 10s
+#define GREEN_LIGHT		3	// default 6s
+#define YELLOW_LIGHT	4	// default 4s
 
-// SEGMENT TOP
-#define PIN_INP_SEG2_0 GPIO_PIN_4  // PORT B
-#define PIN_INP_SEG2_1 GPIO_PIN_5  // PORT B
-#define PIN_INP_SEG2_2 GPIO_PIN_6  // PORT B
-#define PIN_INP_SEG2_3 GPIO_PIN_7  // PORT B
+int vertical_state;
+int vertical_counter;
 
-// SEGMENT TOP
-#define PIN_INP_SEG3_0 GPIO_PIN_8  // PORT B
-#define PIN_INP_SEG3_1 GPIO_PIN_9  // PORT B
-#define PIN_INP_SEG3_2 GPIO_PIN_10 // PORT B
-#define PIN_INP_SEG3_3 GPIO_PIN_11 // PORT B
+int horizontal_state;
+int horizontal_counter;
 
-// SEGMENT MODE
-#define PIN_INP_SEG_MODE_0 GPIO_PIN_12 // PORT B
-#define PIN_INP_SEG_MODE_1 GPIO_PIN_13 // PORT B
-#define PIN_INP_SEG_MODE_2 GPIO_PIN_14 // PORT B
-#define PIN_INP_SEG_MODE_3 GPIO_PIN_15 // PORT B
+// Số lượng nút bấm
+#define NUM_OF_BUTTONS 3
+#define RELEASED 0
+#define PRESSED 1
+#define HOLDED 2
+#define COUNT_500MS 50
+#define COUNT_1S 100
+// Khai báo các biến
+GPIO_TypeDef *portBuffer[NUM_OF_BUTTONS];  // Mảng lưu cổng GPIO của mỗi nút
+uint16_t pinBuffer[NUM_OF_BUTTONS];         // Mảng lưu chân pin của mỗi nút
+
+GPIO_PinState thisButton[NUM_OF_BUTTONS];   // Trạng thái hiện tại của nút bấm
+GPIO_PinState lastButton[NUM_OF_BUTTONS];   // Trạng thái trước đó của nút bấm
+
+int buttonCounter[NUM_OF_BUTTONS];          // Bộ đếm cho thời gian nhấn giữ của từng nút
+int buttonCounter_500ms = 0;                // Bộ đếm 500ms cho nút thứ hai
+
+int buttonBuffer[NUM_OF_BUTTONS];           // Mảng lưu trạng thái của mỗi nút (RELEASED, PRESSED, HOLDED)
+int flag_reset = 0;                         // Cờ reset
+int flag_set = 0;                           // Cờ set
+int value = 0;                              // Giá trị lưu trữ
+int mode = 0;                               // Chế độ điều khiển
 
 #endif /* INC_GLOBAL_H_ */

@@ -1,4 +1,11 @@
-input_reading.c:27:6:button_reading	24	static
-input_reading.c:65:15:is_button_pressed	16	static
-input_reading.c:70:15:is_button_pressed_1s	16	static
-input_reading.c:75:6:restoreBuffer	16	static
+input_reading.c:40:6:set_portBuffer	4	static
+input_reading.c:45:6:set_pinBuffer	4	static
+input_reading.c:50:6:readButton_preprocess	16	static
+input_reading.c:64:6:readButton	16	static
+input_reading.c:127:5:getButton	16	static
+input_reading.c:134:6:display7SEG	24	static
+input_reading.c:184:6:traffic_func	32	static
+input_reading.c:294:6:resetPin	8	static
+input_reading.c:310:6:fsm_input_processing	40	static
+input_reading.c:419:6:setTime	4	static
+input_reading.c:427:6:preprocess	8	static

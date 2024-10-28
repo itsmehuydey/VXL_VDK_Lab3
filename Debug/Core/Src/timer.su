@@ -1,2 +1,0 @@
-timer.c:20:6:setTimer_LED	16	static
-timer.c:25:6:runTimer_LED	4	static

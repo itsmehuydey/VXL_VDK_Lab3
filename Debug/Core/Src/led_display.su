@@ -1,6 +1,0 @@
-led_display.c:3:6:displayLED_YELLOW	16	static
-led_display.c:16:6:displayLED_RED	16	static
-led_display.c:29:6:displayLED_GREEN	16	static
-led_display.c:42:6:displayLED7SEG_LEFT	64	static
-led_display.c:67:6:displayLED7SEG_TOP	64	static
-led_display.c:93:6:displayLED7SEG_MODE	40	static
