@@ -56,22 +56,7 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-//int timerLED_counter = 0;
-//int timerLED_flag = 0;
-//
-//void setTimer_LED(int duration) {
-//    timerLED_counter = duration / 10;
-//    timerLED_flag = 0;
-//}
-//
-//void runTimer_LED() {
-//    if(timerLED_counter > 0) {
-//        timerLED_counter--;
-//        if(timerLED_counter == 0) {
-//            timerLED_flag = 1;
-//        }
-//    }
-//}
+
 /* USER CODE END 0 */
 
 /**
@@ -110,26 +95,27 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   preprocess();
-  setTime(100);
-  while (1)
-  {
-          if (flag_set == 1)
-        	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+   setTimer0(1000);
+   setTimer1(1000);
+   while (1)
+   {
+ 	  	  if(mode!=1) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, SET);
+ 	  	  else HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, RESET);
 
-          if (mode > 4) {
-              mode = 1;
-              setTime();
-          }
+           if (mode > 4) {
+               mode = 1;
+               setTime();
+           }
 
-          if (flag_reset) {
-              resetPin();
-              flag_reset = 0;
-              value = 0;
-          }
-          fsm_input_processing();
-      }
-  /* USER CODE END 3 */
-}
+           if (flag_reset) {
+               resetPin();
+               flag_reset = 0;
+               value = 0;
+           }
+           fsm_input_processing();
+       }
+   /* USER CODE END 3 */
+ }
 
 /**
   * @brief System Clock Configuration
@@ -232,8 +218,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, B0_Pin|B10_Pin|B11_Pin|B12_Pin
-                          |b13_Pin|B4_Pin|B5_Pin|B6_Pin
-                          |B7_Pin|B8_Pin|B9_Pin, GPIO_PIN_RESET);
+                          |B13_Pin|B14_Pin|B4_Pin|B5_Pin
+                          |B6_Pin|B7_Pin|B8_Pin|B9_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : A0_Pin A1_Pin A2_Pin A3_Pin
                            A4_Pin A5_Pin A6_Pin A7_Pin
@@ -249,11 +235,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : B0_Pin B10_Pin B11_Pin B12_Pin
-                           b13_Pin B4_Pin B5_Pin B6_Pin
-                           B7_Pin B8_Pin B9_Pin */
+                           B13_Pin B14_Pin B4_Pin B5_Pin
+                           B6_Pin B7_Pin B8_Pin B9_Pin */
   GPIO_InitStruct.Pin = B0_Pin|B10_Pin|B11_Pin|B12_Pin
-                          |b13_Pin|B4_Pin|B5_Pin|B6_Pin
-                          |B7_Pin|B8_Pin|B9_Pin;
+                          |B13_Pin|B14_Pin|B4_Pin|B5_Pin
+                          |B6_Pin|B7_Pin|B8_Pin|B9_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -268,21 +254,11 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int counter_1s = 0;
-int counter_500ms = 0;
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     readButton();
-    if (counter_1s >= 100) {
-        counter_1s = 0;
-        flag_1s = 1;
-    }
-    counter_1s++;
-    if (counter_500ms >= 50) {
-        counter_500ms = 0;
-        flag_500ms = 1;
-    }
-    counter_500ms++;
+    timerRun();
 }
 /* USER CODE END 4 */
 

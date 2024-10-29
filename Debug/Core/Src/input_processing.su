@@ -1,0 +1,4 @@
+input_processing.c:4:6:fsm_input_processing	40	static
+input_processing.c:108:6:setTime	8	static
+input_processing.c:119:6:preprocess	16	static
+input_processing.c:145:6:resetPin	8	static
