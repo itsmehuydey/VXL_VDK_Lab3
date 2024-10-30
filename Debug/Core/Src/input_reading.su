@@ -1,2 +1,2 @@
 input_reading.c:20:6:readButton	16	static
-input_reading.c:75:5:getButton	16	static
+input_reading.c:79:5:getButton	16	static
