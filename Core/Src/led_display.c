@@ -69,12 +69,10 @@ void traffic_func(void) {
                  GPIO_PIN_2, GPIO_PIN_3);
     display7SEG(vertical_counter_low, GPIOA, GPIO_PIN_4, GPIO_PIN_5,
                  GPIO_PIN_6, GPIO_PIN_7);
-
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10, RESET);
-
     switch (vertical_state) {
         case RED_LIGHT:
             HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, SET);
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9|GPIO_PIN_10, RESET);
             if (vertical_counter <= 0) {
                 vertical_counter = green_time;
                 vertical_state = GREEN_LIGHT;
@@ -83,6 +81,7 @@ void traffic_func(void) {
 
         case GREEN_LIGHT:
             HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, SET);
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10|GPIO_PIN_8, RESET);
             if (vertical_counter <= 0) {
                 vertical_counter = yellow_time;
                 vertical_state = YELLOW_LIGHT;
@@ -91,6 +90,7 @@ void traffic_func(void) {
 
         case YELLOW_LIGHT:
             HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, SET);
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9|GPIO_PIN_8, RESET);
             if (vertical_counter <= 0) {
                 vertical_counter = red_time;
                 vertical_state = RED_LIGHT;
@@ -110,11 +110,10 @@ void traffic_func(void) {
                  GPIO_PIN_10, GPIO_PIN_11);
     display7SEG(horizontal_counter_low, GPIOA, GPIO_PIN_12,
                  GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15);
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11 | GPIO_PIN_12 | GPIO_PIN_13, RESET);
-
     switch (horizontal_state) {
         case RED_LIGHT:
             HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, SET);
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13|GPIO_PIN_12, RESET);
             if (horizontal_counter <= 0) {
                 horizontal_counter = green_time;
                 horizontal_state = GREEN_LIGHT;
@@ -123,6 +122,7 @@ void traffic_func(void) {
 
         case GREEN_LIGHT:
             HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, SET);
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11|GPIO_PIN_13, RESET);
             if (horizontal_counter <= 0) {
                 horizontal_counter = yellow_time;
                 horizontal_state = YELLOW_LIGHT;
@@ -131,6 +131,7 @@ void traffic_func(void) {
 
         case YELLOW_LIGHT:
             HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, SET);
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11|GPIO_PIN_12, RESET);
             if (horizontal_counter <= 0) {
                 horizontal_counter = red_time;
                 horizontal_state = RED_LIGHT;
@@ -141,4 +142,5 @@ void traffic_func(void) {
             break;
     }
 }
+
 

@@ -19,6 +19,12 @@ void fsm_setting() {
         default:
             break;
     }
+    if (mode > 4) {
+        mode = 1;
+        retime();
+    }
+
+
 }
 
 void fsm_automatic() {
@@ -62,7 +68,7 @@ void fsm_manual(int light_color) {
     }
 
     if(timer1_flag) {
-        setTimer1(500);
+        setTimer1(200);
         if (light_color == RED_LIGHT) {
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_11);
@@ -73,9 +79,12 @@ void fsm_manual(int light_color) {
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_10);
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_13);
         }
-    }
-
-    if(flag_set) {
+     if (flag_reset) {
+            reset();
+            flag_reset = 0;
+            value = 0;
+        }
+     if(flag_set) {
         flag_set = 0;
         if (light_color == RED_LIGHT) {
             red_time = value;
@@ -84,46 +93,46 @@ void fsm_manual(int light_color) {
         } else if (light_color == YELLOW_LIGHT) {
             yellow_time = value;
         }
+     }
     }
 }
 
-void setTime() {
+void retime() {
     if (red_time == yellow_time + green_time) {
         vertical_state = GREEN_LIGHT;
         vertical_counter = green_time;
         horizontal_state = RED_LIGHT;
         horizontal_counter = red_time;
     } else {
-        preprocess();
+    	renew_all();
     }
 }
 
-void preprocess() {
+void renew_all() {
     portBuffer[0] = GPIOB;
     portBuffer[1] = GPIOB;
     portBuffer[2] = GPIOB;
     pinBuffer[0] = GPIO_PIN_1;
     pinBuffer[1] = GPIO_PIN_2;
     pinBuffer[2] = GPIO_PIN_3;
-
     for (int i = 0; i < NUM_OF_BUTTONS; i++) {
         buttonBuffer[i] = RELEASED;
         thisButton[i] = RELEASED;
         lastButton[i] = RELEASED;
         buttonCounter[i] = 0;
     }
-
     mode = 1;
     value = 0;
-    red_time = 5;
-    green_time = 3;
-    yellow_time = 2;
-    setTime();
+    red_time = RED_LIGHT;
+    green_time = GREEN_LIGHT;
+    yellow_time = YELLOW_LIGHT;
+    retime();
     flag_set = 0;
     flag_reset = 0;
+
 }
 
-void resetPin(void) {
+void reset(void) {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 |
                       GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 |
                       GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 |

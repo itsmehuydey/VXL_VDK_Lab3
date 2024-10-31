@@ -94,7 +94,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  preprocess();
+  renew_all();
    setTimer0(1000);
    setTimer1(1000);
    while (1)

@@ -10,9 +10,9 @@
 
 
 void fsm_setting();
-void setTime();
-void preprocess();
-void resetPin(void);
+void  retime();
+void renew_all();
+void reset();
 void fsm_automatic() ;
 void fsm_manual(int light_color);
 

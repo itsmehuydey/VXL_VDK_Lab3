@@ -51,10 +51,8 @@ extern int buttonCounter[NUM_OF_BUTTONS];
 extern int buttonCounter_500ms;
 
 extern int buttonBuffer[NUM_OF_BUTTONS];
-extern int flag_reset ;
-extern int flag_set;
 extern int value;
-extern int mode , flag_reset, timer0_counter, timer0_flag, timer1_counter, timer1_flag , KeyReg0[NUM_OF_BUTTONS] , KeyReg1[NUM_OF_BUTTONS], KeyReg2[NUM_OF_BUTTONS] ,
+extern int mode, flag_set, flag_reset, timer0_counter, timer0_flag, timer1_counter, timer1_flag , KeyReg0[NUM_OF_BUTTONS] , KeyReg1[NUM_OF_BUTTONS], KeyReg2[NUM_OF_BUTTONS] ,
  lastStableButtonState[NUM_OF_BUTTONS];
 
 #endif /* INC_GLOBAL_H_ */
