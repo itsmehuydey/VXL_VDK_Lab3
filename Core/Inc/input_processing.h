@@ -9,16 +9,12 @@
 #include "global.h"
 
 
-void fsm_input_processing(void);
-
+void fsm_setting();
 void setTime();
-
-
 void preprocess();
-
-
 void resetPin(void);
-
+void fsm_automatic() ;
+void fsm_manual(int light_color);
 
 
  # endif /* INC_INPUT_PROCESSING_H_ */

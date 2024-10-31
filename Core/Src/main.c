@@ -99,20 +99,9 @@ int main(void)
    setTimer1(1000);
    while (1)
    {
- 	  	  if(mode!=1) HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, SET);
- 	  	  else HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, RESET);
-
-           if (mode > 4) {
-               mode = 1;
-               setTime();
-           }
-
-           if (flag_reset) {
-               resetPin();
-               flag_reset = 0;
-               value = 0;
-           }
-           fsm_input_processing();
+//			fsm_automatic();
+//			fsm_manual();
+			fsm_setting();
        }
    /* USER CODE END 3 */
  }

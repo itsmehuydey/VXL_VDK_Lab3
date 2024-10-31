@@ -11,21 +11,21 @@
 #define GREEN_LIGHT  3
 #define YELLOW_LIGHT 2
 
-// Các biến lưu trạng thái và bộ đếm của đèn giao thông
-extern int vertical_state;         // Trạng thái hiện tại của đèn giao thông dọc (RED, GREEN, YELLOW)
-extern int vertical_counter;       // Bộ đếm thời gian cho đèn giao thông dọc
 
-extern int horizontal_state;       // Trạng thái hiện tại của đèn giao thông ngang (RED, GREEN, YELLOW)
-extern int horizontal_counter;     // Bộ đếm thời gian cho đèn giao thông ngang
+extern int vertical_state;
+extern int vertical_counter;
 
-// Biến hiển thị giá trị trên LED 7 đoạn
-extern int value_high;             // Giá trị cao (hàng chục) của biến `value`
-extern int value_low;              // Giá trị thấp (hàng đơn vị) của biến `value`
+extern int horizontal_state;
+extern int horizontal_counter;
 
-// Các biến thời gian cho đèn giao thông
-extern int red_time;               // Thời gian cho đèn đỏ
-extern int green_time;             // Thời gian cho đèn xanh
-extern int yellow_time;            // Thời gian cho đèn vàng
+
+extern int value_high;
+extern int value_low;
+
+
+extern int red_time;
+extern int green_time;
+extern int yellow_time;
 extern int vertical_state;
 extern int vertical_counter;
 
@@ -54,5 +54,7 @@ extern int buttonBuffer[NUM_OF_BUTTONS];
 extern int flag_reset ;
 extern int flag_set;
 extern int value;
-extern int mode , flag_reset, timer0_counter, timer0_flag, timer1_counter, timer1_flag ;
+extern int mode , flag_reset, timer0_counter, timer0_flag, timer1_counter, timer1_flag , KeyReg0[NUM_OF_BUTTONS] , KeyReg1[NUM_OF_BUTTONS], KeyReg2[NUM_OF_BUTTONS] ,
+ lastStableButtonState[NUM_OF_BUTTONS];
+
 #endif /* INC_GLOBAL_H_ */
