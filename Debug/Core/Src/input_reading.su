@@ -1,4 +1,2 @@
-input_reading.c:23:6:readButton	16	static
-input_reading.c:71:6:setFlagsAndHandleActions	16	static
-input_reading.c:100:6:handleIncrease	16	static
-input_reading.c:108:5:getButton	16	static
+input_reading.c:21:6:readButton	16	static
+input_reading.c:121:5:getButton	16	static
