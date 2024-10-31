@@ -37,22 +37,6 @@ void fsm_manual(int light_color) {
     display7SEG(value_low, GPIOA, GPIO_PIN_12,
                  GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15);
 
-    if(mode != 1) {
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, SET);
-        } else {
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, RESET);
-        }
-
-        if (mode > 4) {
-            mode = 1;
-            setTime();
-        }
-
-        if (flag_reset) {
-            resetPin();
-            flag_reset = 0;
-            value = 0;
-        }
 
     if (light_color == RED_LIGHT) {
         int red_time_high = red_time / 10;

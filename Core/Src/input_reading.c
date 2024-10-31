@@ -79,6 +79,22 @@ void setFlagsAndHandleActions(int i) {
     } else if (i == 2 && buttonCounter[2] == 0) {
         flag_set = 1;
     }
+    if(mode != 1) {
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, SET);
+        } else {
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, RESET);
+        }
+
+        if (mode > 4) {
+            mode = 1;
+            setTime();
+        }
+
+        if (flag_reset) {
+            resetPin();
+            flag_reset = 0;
+            value = 0;
+        }
 }
 
 void handleIncrease(int i) {
