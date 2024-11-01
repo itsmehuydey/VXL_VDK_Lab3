@@ -40,19 +40,21 @@ extern int horizontal_counter;
 #define INCREASE 2
 #define COUNT_500MS 500
 #define COUNT_1S 1000
-
+#define DEBOUNCE_THRESHOLD 3
+#define NORMAL_STATE 0
 GPIO_TypeDef *portBuffer[NUM_OF_BUTTONS];
 uint16_t pinBuffer[NUM_OF_BUTTONS];
 
-GPIO_PinState thisButton[NUM_OF_BUTTONS];
-GPIO_PinState lastButton[NUM_OF_BUTTONS];
-
 extern int buttonCounter[NUM_OF_BUTTONS];
-extern int buttonCounter_500ms;
-
-extern int buttonBuffer[NUM_OF_BUTTONS];
-extern int value;
-extern int mode, flag_set, flag_reset, timer0_counter, timer0_flag, timer1_counter, timer1_flag , KeyReg0[NUM_OF_BUTTONS] , KeyReg1[NUM_OF_BUTTONS], KeyReg2[NUM_OF_BUTTONS] ,
+extern int postState[NUM_OF_BUTTONS];//2 //000
+extern int preState[NUM_OF_BUTTONS];//0 //000
+extern int currentState[NUM_OF_BUTTONS];//1
+extern int button[NUM_OF_BUTTONS];
+extern int buttonState[NUM_OF_BUTTONS];
+extern int number_settime;
+extern int mode, flag_set, flag_reset, timer0_counter, timer0_flag, timer1_counter, timer1_flag ,
  lastStableButtonState[NUM_OF_BUTTONS];
-
+extern int KeyReg0[NUM_OF_BUTTONS], KeyReg1[NUM_OF_BUTTONS],
+ KeyReg2[NUM_OF_BUTTONS],
+ KeyReg3[NUM_OF_BUTTONS];
 #endif /* INC_GLOBAL_H_ */

@@ -19,12 +19,6 @@ void fsm_setting() {
         default:
             break;
     }
-    if (mode > 4) {
-        mode = 1;
-        retime();
-    }
-
-
 }
 
 void fsm_automatic() {
@@ -36,20 +30,19 @@ void fsm_automatic() {
 }
 
 void fsm_manual(int light_color) {
-    value_high = value / 10;
-    value_low = value % 10;
+    value_high = number_settime / 10;
+    value_low = number_settime % 10;
     display7SEG(value_high, GPIOA, GPIO_PIN_8,
-                 GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_11);
+                 GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_11);//led2
     display7SEG(value_low, GPIOA, GPIO_PIN_12,
-                 GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15);
-
+                 GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15);//led3
 
     if (light_color == RED_LIGHT) {
         int red_time_high = red_time / 10;
         int red_time_low = red_time % 10;
-        display7SEG(red_time_high, GPIOA, GPIO_PIN_0, GPIO_PIN_1,
+        display7SEG(red_time_high, GPIOA, GPIO_PIN_0, GPIO_PIN_1,//led1
                      GPIO_PIN_2, GPIO_PIN_3);
-        display7SEG(red_time_low, GPIOA, GPIO_PIN_4, GPIO_PIN_5,
+        display7SEG(red_time_low, GPIOA, GPIO_PIN_4, GPIO_PIN_5,//led2
                      GPIO_PIN_6, GPIO_PIN_7);
     } else if (light_color == GREEN_LIGHT) {
         int green_time_high = green_time / 10;
@@ -79,20 +72,23 @@ void fsm_manual(int light_color) {
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_10);
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_13);
         }
+        //but1
      if (flag_reset) {
             reset();
             flag_reset = 0;
-            value = 0;
+            number_settime = 0;
         }
+     //but3
      if(flag_set) {
         flag_set = 0;
         if (light_color == RED_LIGHT) {
-            red_time = value;
+            red_time = number_settime;
         } else if (light_color == GREEN_LIGHT) {
-            green_time = value;
+            green_time = number_settime;
         } else if (light_color == YELLOW_LIGHT) {
-            yellow_time = value;
+            yellow_time = number_settime;
         }
+
      }
     }
 }
@@ -116,23 +112,26 @@ void renew_all() {
     pinBuffer[1] = GPIO_PIN_2;
     pinBuffer[2] = GPIO_PIN_3;
     for (int i = 0; i < NUM_OF_BUTTONS; i++) {
-        buttonBuffer[i] = RELEASED;
-        thisButton[i] = RELEASED;
-        lastButton[i] = RELEASED;
+    	button[i] = RELEASED;
+    	postState[i]=RELEASED;
+    	preState[i]=RELEASED;
+    	currentState[i]=RELEASED;
+    	buttonState[i] = RELEASED;
         buttonCounter[i] = 0;
     }
     mode = 1;
-    value = 0;
+    number_settime = 0;
     red_time = RED_LIGHT;
     green_time = GREEN_LIGHT;
     yellow_time = YELLOW_LIGHT;
     retime();
+   // reset();
     flag_set = 0;
     flag_reset = 0;
 
 }
 
-void reset(void) {
+void reset() {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 |
                       GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 |
                       GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 |
