@@ -147,11 +147,11 @@ void fsm_setting() {
 void fsm_automatic() {
  80001b8:	b580      	push	{r7, lr}
  80001ba:	af00      	add	r7, sp, #0
-    if(timer0_flag) {
+    if(timer0_flag==1) {
  80001bc:	4b07      	ldr	r3, [pc, #28]	; (80001dc <fsm_automatic+0x24>)
  80001be:	681b      	ldr	r3, [r3, #0]
- 80001c0:	2b00      	cmp	r3, #0
- 80001c2:	d009      	beq.n	80001d8 <fsm_automatic+0x20>
+ 80001c0:	2b01      	cmp	r3, #1
+ 80001c2:	d109      	bne.n	80001d8 <fsm_automatic+0x20>
         traffic_func();
  80001c4:	f000 fc68 	bl	8000a98 <traffic_func>
         HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
@@ -380,118 +380,117 @@ void fsm_manual(int light_color) {
  8000372:	4b37      	ldr	r3, [pc, #220]	; (8000450 <fsm_manual+0x26c>)
  8000374:	681b      	ldr	r3, [r3, #0]
  8000376:	2b00      	cmp	r3, #0
- 8000378:	d055      	beq.n	8000426 <fsm_manual+0x242>
-        setTimer1(200);
- 800037a:	20c8      	movs	r0, #200	; 0xc8
- 800037c:	f000 fe86 	bl	800108c <setTimer1>
+ 8000378:	d056      	beq.n	8000428 <fsm_manual+0x244>
+        setTimer1(500);
+ 800037a:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
+ 800037e:	f000 fe85 	bl	800108c <setTimer1>
         if (light_color == RED_LIGHT) {
- 8000380:	687b      	ldr	r3, [r7, #4]
- 8000382:	2b05      	cmp	r3, #5
- 8000384:	d10a      	bne.n	800039c <fsm_manual+0x1b8>
+ 8000382:	687b      	ldr	r3, [r7, #4]
+ 8000384:	2b05      	cmp	r3, #5
+ 8000386:	d10a      	bne.n	800039e <fsm_manual+0x1ba>
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
- 8000386:	f44f 7180 	mov.w	r1, #256	; 0x100
- 800038a:	4832      	ldr	r0, [pc, #200]	; (8000454 <fsm_manual+0x270>)
- 800038c:	f001 fa07 	bl	800179e <HAL_GPIO_TogglePin>
+ 8000388:	f44f 7180 	mov.w	r1, #256	; 0x100
+ 800038c:	4831      	ldr	r0, [pc, #196]	; (8000454 <fsm_manual+0x270>)
+ 800038e:	f001 fa06 	bl	800179e <HAL_GPIO_TogglePin>
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_11);
- 8000390:	f44f 6100 	mov.w	r1, #2048	; 0x800
- 8000394:	482f      	ldr	r0, [pc, #188]	; (8000454 <fsm_manual+0x270>)
- 8000396:	f001 fa02 	bl	800179e <HAL_GPIO_TogglePin>
- 800039a:	e01a      	b.n	80003d2 <fsm_manual+0x1ee>
+ 8000392:	f44f 6100 	mov.w	r1, #2048	; 0x800
+ 8000396:	482f      	ldr	r0, [pc, #188]	; (8000454 <fsm_manual+0x270>)
+ 8000398:	f001 fa01 	bl	800179e <HAL_GPIO_TogglePin>
+ 800039c:	e01a      	b.n	80003d4 <fsm_manual+0x1f0>
         } else if (light_color == GREEN_LIGHT) {
- 800039c:	687b      	ldr	r3, [r7, #4]
- 800039e:	2b03      	cmp	r3, #3
- 80003a0:	d10a      	bne.n	80003b8 <fsm_manual+0x1d4>
+ 800039e:	687b      	ldr	r3, [r7, #4]
+ 80003a0:	2b03      	cmp	r3, #3
+ 80003a2:	d10a      	bne.n	80003ba <fsm_manual+0x1d6>
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_9);
- 80003a2:	f44f 7100 	mov.w	r1, #512	; 0x200
- 80003a6:	482b      	ldr	r0, [pc, #172]	; (8000454 <fsm_manual+0x270>)
- 80003a8:	f001 f9f9 	bl	800179e <HAL_GPIO_TogglePin>
+ 80003a4:	f44f 7100 	mov.w	r1, #512	; 0x200
+ 80003a8:	482a      	ldr	r0, [pc, #168]	; (8000454 <fsm_manual+0x270>)
+ 80003aa:	f001 f9f8 	bl	800179e <HAL_GPIO_TogglePin>
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_12);
- 80003ac:	f44f 5180 	mov.w	r1, #4096	; 0x1000
- 80003b0:	4828      	ldr	r0, [pc, #160]	; (8000454 <fsm_manual+0x270>)
- 80003b2:	f001 f9f4 	bl	800179e <HAL_GPIO_TogglePin>
- 80003b6:	e00c      	b.n	80003d2 <fsm_manual+0x1ee>
+ 80003ae:	f44f 5180 	mov.w	r1, #4096	; 0x1000
+ 80003b2:	4828      	ldr	r0, [pc, #160]	; (8000454 <fsm_manual+0x270>)
+ 80003b4:	f001 f9f3 	bl	800179e <HAL_GPIO_TogglePin>
+ 80003b8:	e00c      	b.n	80003d4 <fsm_manual+0x1f0>
         } else if (light_color == YELLOW_LIGHT) {
- 80003b8:	687b      	ldr	r3, [r7, #4]
- 80003ba:	2b02      	cmp	r3, #2
- 80003bc:	d109      	bne.n	80003d2 <fsm_manual+0x1ee>
+ 80003ba:	687b      	ldr	r3, [r7, #4]
+ 80003bc:	2b02      	cmp	r3, #2
+ 80003be:	d109      	bne.n	80003d4 <fsm_manual+0x1f0>
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_10);
- 80003be:	f44f 6180 	mov.w	r1, #1024	; 0x400
- 80003c2:	4824      	ldr	r0, [pc, #144]	; (8000454 <fsm_manual+0x270>)
- 80003c4:	f001 f9eb 	bl	800179e <HAL_GPIO_TogglePin>
+ 80003c0:	f44f 6180 	mov.w	r1, #1024	; 0x400
+ 80003c4:	4823      	ldr	r0, [pc, #140]	; (8000454 <fsm_manual+0x270>)
+ 80003c6:	f001 f9ea 	bl	800179e <HAL_GPIO_TogglePin>
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_13);
- 80003c8:	f44f 5100 	mov.w	r1, #8192	; 0x2000
- 80003cc:	4821      	ldr	r0, [pc, #132]	; (8000454 <fsm_manual+0x270>)
- 80003ce:	f001 f9e6 	bl	800179e <HAL_GPIO_TogglePin>
+ 80003ca:	f44f 5100 	mov.w	r1, #8192	; 0x2000
+ 80003ce:	4821      	ldr	r0, [pc, #132]	; (8000454 <fsm_manual+0x270>)
+ 80003d0:	f001 f9e5 	bl	800179e <HAL_GPIO_TogglePin>
         }
         //but1
      if (flag_reset) {
- 80003d2:	4b21      	ldr	r3, [pc, #132]	; (8000458 <fsm_manual+0x274>)
- 80003d4:	681b      	ldr	r3, [r3, #0]
- 80003d6:	2b00      	cmp	r3, #0
- 80003d8:	d007      	beq.n	80003ea <fsm_manual+0x206>
+ 80003d4:	4b20      	ldr	r3, [pc, #128]	; (8000458 <fsm_manual+0x274>)
+ 80003d6:	681b      	ldr	r3, [r3, #0]
+ 80003d8:	2b00      	cmp	r3, #0
+ 80003da:	d007      	beq.n	80003ec <fsm_manual+0x208>
             reset();
- 80003da:	f000 f8e5 	bl	80005a8 <reset>
+ 80003dc:	f000 f8e4 	bl	80005a8 <reset>
             flag_reset = 0;
- 80003de:	4b1e      	ldr	r3, [pc, #120]	; (8000458 <fsm_manual+0x274>)
- 80003e0:	2200      	movs	r2, #0
- 80003e2:	601a      	str	r2, [r3, #0]
+ 80003e0:	4b1d      	ldr	r3, [pc, #116]	; (8000458 <fsm_manual+0x274>)
+ 80003e2:	2200      	movs	r2, #0
+ 80003e4:	601a      	str	r2, [r3, #0]
             number_settime = 0;
- 80003e4:	4b12      	ldr	r3, [pc, #72]	; (8000430 <fsm_manual+0x24c>)
- 80003e6:	2200      	movs	r2, #0
- 80003e8:	601a      	str	r2, [r3, #0]
+ 80003e6:	4b12      	ldr	r3, [pc, #72]	; (8000430 <fsm_manual+0x24c>)
+ 80003e8:	2200      	movs	r2, #0
+ 80003ea:	601a      	str	r2, [r3, #0]
         }
      //but3
      if(flag_set) {
- 80003ea:	4b1c      	ldr	r3, [pc, #112]	; (800045c <fsm_manual+0x278>)
- 80003ec:	681b      	ldr	r3, [r3, #0]
- 80003ee:	2b00      	cmp	r3, #0
- 80003f0:	d019      	beq.n	8000426 <fsm_manual+0x242>
+ 80003ec:	4b1b      	ldr	r3, [pc, #108]	; (800045c <fsm_manual+0x278>)
+ 80003ee:	681b      	ldr	r3, [r3, #0]
+ 80003f0:	2b00      	cmp	r3, #0
+ 80003f2:	d019      	beq.n	8000428 <fsm_manual+0x244>
         flag_set = 0;
- 80003f2:	4b1a      	ldr	r3, [pc, #104]	; (800045c <fsm_manual+0x278>)
- 80003f4:	2200      	movs	r2, #0
- 80003f6:	601a      	str	r2, [r3, #0]
+ 80003f4:	4b19      	ldr	r3, [pc, #100]	; (800045c <fsm_manual+0x278>)
+ 80003f6:	2200      	movs	r2, #0
+ 80003f8:	601a      	str	r2, [r3, #0]
         if (light_color == RED_LIGHT) {
- 80003f8:	687b      	ldr	r3, [r7, #4]
- 80003fa:	2b05      	cmp	r3, #5
- 80003fc:	d104      	bne.n	8000408 <fsm_manual+0x224>
+ 80003fa:	687b      	ldr	r3, [r7, #4]
+ 80003fc:	2b05      	cmp	r3, #5
+ 80003fe:	d104      	bne.n	800040a <fsm_manual+0x226>
             red_time = number_settime;
- 80003fe:	4b0c      	ldr	r3, [pc, #48]	; (8000430 <fsm_manual+0x24c>)
- 8000400:	681b      	ldr	r3, [r3, #0]
- 8000402:	4a10      	ldr	r2, [pc, #64]	; (8000444 <fsm_manual+0x260>)
- 8000404:	6013      	str	r3, [r2, #0]
+ 8000400:	4b0b      	ldr	r3, [pc, #44]	; (8000430 <fsm_manual+0x24c>)
+ 8000402:	681b      	ldr	r3, [r3, #0]
+ 8000404:	4a0f      	ldr	r2, [pc, #60]	; (8000444 <fsm_manual+0x260>)
+ 8000406:	6013      	str	r3, [r2, #0]
             yellow_time = number_settime;
         }
 
      }
     }
 }
- 8000406:	e00e      	b.n	8000426 <fsm_manual+0x242>
+ 8000408:	e00e      	b.n	8000428 <fsm_manual+0x244>
         } else if (light_color == GREEN_LIGHT) {
- 8000408:	687b      	ldr	r3, [r7, #4]
- 800040a:	2b03      	cmp	r3, #3
- 800040c:	d104      	bne.n	8000418 <fsm_manual+0x234>
+ 800040a:	687b      	ldr	r3, [r7, #4]
+ 800040c:	2b03      	cmp	r3, #3
+ 800040e:	d104      	bne.n	800041a <fsm_manual+0x236>
             green_time = number_settime;
- 800040e:	4b08      	ldr	r3, [pc, #32]	; (8000430 <fsm_manual+0x24c>)
- 8000410:	681b      	ldr	r3, [r3, #0]
- 8000412:	4a0d      	ldr	r2, [pc, #52]	; (8000448 <fsm_manual+0x264>)
- 8000414:	6013      	str	r3, [r2, #0]
+ 8000410:	4b07      	ldr	r3, [pc, #28]	; (8000430 <fsm_manual+0x24c>)
+ 8000412:	681b      	ldr	r3, [r3, #0]
+ 8000414:	4a0c      	ldr	r2, [pc, #48]	; (8000448 <fsm_manual+0x264>)
+ 8000416:	6013      	str	r3, [r2, #0]
 }
- 8000416:	e006      	b.n	8000426 <fsm_manual+0x242>
+ 8000418:	e006      	b.n	8000428 <fsm_manual+0x244>
         } else if (light_color == YELLOW_LIGHT) {
- 8000418:	687b      	ldr	r3, [r7, #4]
- 800041a:	2b02      	cmp	r3, #2
- 800041c:	d103      	bne.n	8000426 <fsm_manual+0x242>
+ 800041a:	687b      	ldr	r3, [r7, #4]
+ 800041c:	2b02      	cmp	r3, #2
+ 800041e:	d103      	bne.n	8000428 <fsm_manual+0x244>
             yellow_time = number_settime;
- 800041e:	4b04      	ldr	r3, [pc, #16]	; (8000430 <fsm_manual+0x24c>)
- 8000420:	681b      	ldr	r3, [r3, #0]
- 8000422:	4a0a      	ldr	r2, [pc, #40]	; (800044c <fsm_manual+0x268>)
- 8000424:	6013      	str	r3, [r2, #0]
+ 8000420:	4b03      	ldr	r3, [pc, #12]	; (8000430 <fsm_manual+0x24c>)
+ 8000422:	681b      	ldr	r3, [r3, #0]
+ 8000424:	4a09      	ldr	r2, [pc, #36]	; (800044c <fsm_manual+0x268>)
+ 8000426:	6013      	str	r3, [r2, #0]
 }
- 8000426:	bf00      	nop
- 8000428:	3720      	adds	r7, #32
- 800042a:	46bd      	mov	sp, r7
- 800042c:	bd80      	pop	{r7, pc}
- 800042e:	bf00      	nop
+ 8000428:	bf00      	nop
+ 800042a:	3720      	adds	r7, #32
+ 800042c:	46bd      	mov	sp, r7
+ 800042e:	bd80      	pop	{r7, pc}
  8000430:	20000094 	.word	0x20000094
  8000434:	66666667 	.word	0x66666667
  8000438:	200000b8 	.word	0x200000b8

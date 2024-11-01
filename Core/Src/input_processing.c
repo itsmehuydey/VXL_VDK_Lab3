@@ -22,7 +22,7 @@ void fsm_setting() {
 }
 
 void fsm_automatic() {
-    if(timer0_flag) {
+    if(timer0_flag==1) {
         traffic_func();
         HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
         setTimer0(1000);
@@ -61,7 +61,7 @@ void fsm_manual(int light_color) {
     }
 
     if(timer1_flag) {
-        setTimer1(200);
+        setTimer1(500);
         if (light_color == RED_LIGHT) {
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_8);
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_11);
