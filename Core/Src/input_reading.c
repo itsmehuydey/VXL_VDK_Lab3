@@ -11,6 +11,7 @@ int button[NUM_OF_BUTTONS]={1,1,1};
 int flag_reset = 0;
 int flag_set = 0;
 int flag_change = 0;
+int flag_settime_mode = 0;
 int flag_holding = 0;
 int number_settime = 0;
 int mode = 0;
@@ -34,7 +35,14 @@ void readButton(void) {
                         break;
                     case PRESSED:
                         if (button[i] == PRESSED) {
-                        	setFlags_HandleActions( i);
+                            if (i == 0 && buttonCounter[0] == 0) {
+                                flag_reset = 1;
+
+                            } else if (i == 1 && buttonCounter[1] == 0) {
+                            	flag_settime_mode = 1;
+                            } else if (i == 2 && buttonCounter[2] == 0) {
+                                flag_set = 1;
+                            }
                             if (buttonCounter[i] <= HOLDED) {
                                 buttonCounter[i]++;
                             } else {
@@ -47,7 +55,7 @@ void readButton(void) {
                         }
                         break;
                     case INCREASE:
-                        if (buttonState[i] == PRESSED) {
+                        if (buttonState[1] == PRESSED) {
                             handleIncrease(i);
                         } else {
                             buttonCounter[i] = 0;
@@ -66,28 +74,21 @@ int getButton(int index){
 	else return button[index];
 }
 
-void setFlags_HandleActions(int i) {
-    if (i == 0 && buttonCounter[0] == 0) {
-        flag_reset = 1;
-        number_settime = 0;
-        mode++;
-        if (mode > 4) {
-            mode = 1;
-            retime();
-        }
-    } else if (i == 1 && buttonCounter[1] == 0) {
-        number_settime++;
-        if (number_settime > 99) number_settime = 0;
-    } else if (i == 2 && buttonCounter[2] == 0) {
-        flag_set = 1;
-    }
-    if(mode != 1) {
-      HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, SET);
-    } else {
-      HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, RESET);
-    }
 
-}
+
+
+//void setFlags_HandleActions() {
+//		if (flag_reset == 1) {
+//		        reset();         // Perform the reset action
+//		        mode++;          // Update the mode
+//		        if (mode > 4) {
+//		            mode = 1;
+//		            retime();
+//		        }
+//		        number_settime = 0;
+//		        flag_reset = 0;  // Reset the flag
+//		    }
+//}
 
 void handleIncrease(int i) {
     if (buttonCounter[i] % 10 == 0) {

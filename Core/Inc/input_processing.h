@@ -15,6 +15,6 @@ void renew_all();
 void reset();
 void fsm_automatic() ;
 void fsm_manual(int light_color);
-
+void controlLoop(void);
 
  # endif /* INC_INPUT_PROCESSING_H_ */

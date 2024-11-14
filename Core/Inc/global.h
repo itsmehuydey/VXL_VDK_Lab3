@@ -52,7 +52,7 @@ extern int currentState[NUM_OF_BUTTONS];//1
 extern int button[NUM_OF_BUTTONS];
 extern int buttonState[NUM_OF_BUTTONS];
 extern int number_settime;
-extern int mode, flag_set, flag_reset, timer0_counter, timer0_flag, timer1_counter, timer1_flag ,
+extern int mode, flag_set,flag_change, flag_settime_mode, flag_reset, timer0_counter, timer0_flag, timer1_counter, timer1_flag ,
  lastStableButtonState[NUM_OF_BUTTONS];
 extern int KeyReg0[NUM_OF_BUTTONS], KeyReg1[NUM_OF_BUTTONS],
  KeyReg2[NUM_OF_BUTTONS],

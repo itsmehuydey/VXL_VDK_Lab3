@@ -4,6 +4,6 @@
 
 void readButton(void);
 int getButton(int index);
-void setFlags_HandleActions(int i);
+void setFlags_HandleActions();
 void handleIncrease(int i);
 #endif /* INC_INPUT_READING_H_ */

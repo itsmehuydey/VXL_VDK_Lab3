@@ -1,6 +1,7 @@
 #include "input_processing.h"
 int value_high;
-int value_low;
+int value_low, mode;
+ //mode = 0;
 void fsm_setting() {
     display7SEG(mode, GPIOB, GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_6, GPIO_PIN_7);
     switch(mode) {
@@ -19,6 +20,23 @@ void fsm_setting() {
         default:
             break;
     }
+    //but1
+		if (flag_reset == 1) {
+	            reset();
+	            flag_reset = 0;
+                mode++;
+                if (mode > 4) {
+                  mode = 1;
+                  retime();
+                  }
+                number_settime = 0;
+       	     if(mode != 1) {
+       	       HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, SET);
+       	     } else {
+       	       HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, RESET);
+       	     }
+	        }
+
 }
 
 void fsm_automatic() {
@@ -72,25 +90,26 @@ void fsm_manual(int light_color) {
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_10);
             HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_13);
         }
-        //but1
-     if (flag_reset) {
-            reset();
-            flag_reset = 0;
-            number_settime = 0;
-        }
-     //but3
-     if(flag_set) {
-        flag_set = 0;
-        if (light_color == RED_LIGHT) {
-            red_time = number_settime;
-        } else if (light_color == GREEN_LIGHT) {
-            green_time = number_settime;
-        } else if (light_color == YELLOW_LIGHT) {
-            yellow_time = number_settime;
-        }
-
-     }
     }
+
+    	     //but2
+    	     if(flag_settime_mode == 1){
+    	    	 number_settime++;
+    	        if (number_settime > 99) number_settime = 0;
+    	        flag_settime_mode = 0;
+    	     }
+    	     //but3
+    	     if(flag_set) {
+    	        if (light_color == RED_LIGHT) {
+    	            red_time = number_settime;
+    	        } else if (light_color == GREEN_LIGHT) {
+    	            green_time = number_settime;
+    	        } else if (light_color == YELLOW_LIGHT) {
+    	            yellow_time = number_settime;
+    	        }
+    	        flag_set = 0;
+    	     }
+
 }
 
 void retime() {
@@ -125,10 +144,10 @@ void renew_all() {
     green_time = GREEN_LIGHT;
     yellow_time = YELLOW_LIGHT;
     retime();
-   // reset();
+    reset();
     flag_set = 0;
     flag_reset = 0;
-
+    flag_settime_mode = 0;
 }
 
 void reset() {
