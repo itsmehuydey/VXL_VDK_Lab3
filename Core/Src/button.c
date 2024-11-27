@@ -37,7 +37,6 @@ void readButton(void) {
                         if (button[i] == PRESSED) {
                             if (i == 0 && buttonCounter[0] == 0) {
                                 flag_reset = 1;
-
                             } else if (i == 1 && buttonCounter[1] == 0) {
                             	flag_settime_mode = 1;
                             } else if (i == 2 && buttonCounter[2] == 0) {

@@ -1,10 +1,10 @@
 #ifndef INC_GLOBAL_H_
 #define INC_GLOBAL_H_
 
+#include <button.h>
+#include <traffic_light.h>
 #include "main.h"
 #include "timer.h"
-#include "input_reading.h"
-#include "led_display.h"
 #include "input_processing.h"
 
 #define RED_LIGHT    5
@@ -42,6 +42,11 @@ extern int horizontal_counter;
 #define COUNT_1S 1000
 #define DEBOUNCE_THRESHOLD 3
 #define NORMAL_STATE 0
+#define INIT 0
+#define MODE1 1
+#define MODE2 2
+#define MODE3 3
+#define MODE4 4
 GPIO_TypeDef *portBuffer[NUM_OF_BUTTONS];
 uint16_t pinBuffer[NUM_OF_BUTTONS];
 

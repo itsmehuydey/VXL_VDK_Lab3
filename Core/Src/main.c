@@ -18,11 +18,11 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include <button.h>
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "input_reading.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -97,14 +97,20 @@ int main(void)
   renew_all();
    setTimer0(1000);
    setTimer1(1000);
+   mode = INIT;
    while (1)
    {
-//			fsm_automatic();
-//			fsm_manual();
+			fsm_automatic();
+			//fsm_manual();
 			fsm_setting();
-       }
+//	       if(timer0_flag==1) {
+//	           HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);
+//	           fsm_automatic();
+//	           setTimer0(1000);
+//       }
    /* USER CODE END 3 */
  }
+}
 
 /**
   * @brief System Clock Configuration
