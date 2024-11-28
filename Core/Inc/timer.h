@@ -6,7 +6,10 @@
 // */
 #include "global.h"
 
+#define MAXTM 10
 
-void setTimer0(int duration);
-void setTimer1(int duration);
+extern int timer_flag[MAXTM];
+extern int timer_counter[MAXTM];
+
+void setTimer(int index, int counter);
 void timerRun();

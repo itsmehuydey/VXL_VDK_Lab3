@@ -1,5 +1,0 @@
-input_processing.c:26:6:fsm_automatic	32	static
-input_processing.c:116:6:fsm_setting	40	static
-input_processing.c:264:6:retime	8	static
-input_processing.c:275:6:renew_all	16	static
-input_processing.c:302:6:reset	8	static

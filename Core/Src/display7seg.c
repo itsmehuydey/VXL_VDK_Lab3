@@ -6,52 +6,45 @@
  */
 
 #include "display7seg.h"
-void display7SEG (int num, GPIO_TypeDef* type, uint16_t A, uint16_t B, uint16_t C, uint16_t D){
-	switch(num){
-	case -1:
-		HAL_GPIO_WritePin(type, D|C|B|A, SET);
-		break;
-	case 0:
-		HAL_GPIO_WritePin(type, D|C|B|A, RESET);
-		break;
-	case 1:
-		HAL_GPIO_WritePin(type, D|C|B, RESET);
-		HAL_GPIO_WritePin(type, A, SET);
-		break;
-	case 2:
-		HAL_GPIO_WritePin(type, D|C|A, RESET);
-		HAL_GPIO_WritePin(type, B, SET);
-		break;
-	case 3:
-		HAL_GPIO_WritePin(type, D|C, RESET);
-		HAL_GPIO_WritePin(type, B|A, SET);
-		break;
-	case 4:
-		HAL_GPIO_WritePin(type, D|B|A, RESET);
-		HAL_GPIO_WritePin(type, C, SET);
-		break;
-	case 5:
-		HAL_GPIO_WritePin(type, D|B, RESET);
-		HAL_GPIO_WritePin(type, C|A, SET);
-		break;
-	case 6:
-		HAL_GPIO_WritePin(type, D|A, RESET);
-		HAL_GPIO_WritePin(type, B|C, SET);
-		break;
-	case 7:
-		HAL_GPIO_WritePin(type, D, RESET);
-		HAL_GPIO_WritePin(type, C|B|A, SET);
-		break;
-	case 8:
-		HAL_GPIO_WritePin(type, C|B|A, RESET);
-		HAL_GPIO_WritePin(type, D, SET);
-		break;
-	case 9:
-		HAL_GPIO_WritePin(type, C|B, RESET);
-		HAL_GPIO_WritePin(type, D|A, SET);
-		break;
-	default:
-		HAL_GPIO_WritePin(type, D|C|B|A, SET);
-		break;
+
+#define MODE 0
+#define DUR 1
+
+void displayLED7SEG(int number, int modify){
+	int div = number / 10;
+	int mod = number % 10;
+
+	int arr1[4] = {0};
+	int arr2[4] = {0};
+
+	for(int i = 3; i >= 0; --i){
+		arr1[i] = div % 2;
+		div = div / 2;
+
+		arr2[i] = mod % 2;
+		mod = mod / 2;
+	}
+
+	if(modify == MODE){
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, arr1[3]);
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, arr1[2]);
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, arr1[1]);
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, arr1[0]);
+
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, arr2[3]);
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, arr2[2]);
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, arr2[1]);
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, arr2[0]);
+	}
+	if(modify == DUR){
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, arr1[3]);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, arr1[2]);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, arr1[1]);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, arr1[0]);
+
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, arr2[3]);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, arr2[2]);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, arr2[1]);
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, arr2[0]);
 	}
 }

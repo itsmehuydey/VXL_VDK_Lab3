@@ -1,65 +1,64 @@
-#include <traffic_light.h>
+#include "traffic_light.h"
 
-int vertical_state  = 3;
-int vertical_counter = 3;
 
-int horizontal_state = 5;
-int horizontal_counter = 5;
+void clearAllLed(){
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, RESET);//RED1
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, RESET);//RED2
 
-int red_time = 5;
-int green_time = 3;
-int yellow_time= 2;
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, RESET);//YEL1
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, RESET);//YEL2
 
-void display7SEG (int num, GPIO_TypeDef* type, uint16_t A, uint16_t B, uint16_t C, uint16_t D){
-	switch(num){
-	case -1:
-		HAL_GPIO_WritePin(type, D|C|B|A, SET);
-		break;
-	case 0:
-		HAL_GPIO_WritePin(type, D|C|B|A, RESET);
-		break;
-	case 1:
-		HAL_GPIO_WritePin(type, D|C|B, RESET);
-		HAL_GPIO_WritePin(type, A, SET);
-		break;
-	case 2:
-		HAL_GPIO_WritePin(type, D|C|A, RESET);
-		HAL_GPIO_WritePin(type, B, SET);
-		break;
-	case 3:
-		HAL_GPIO_WritePin(type, D|C, RESET);
-		HAL_GPIO_WritePin(type, B|A, SET);
-		break;
-	case 4:
-		HAL_GPIO_WritePin(type, D|B|A, RESET);
-		HAL_GPIO_WritePin(type, C, SET);
-		break;
-	case 5:
-		HAL_GPIO_WritePin(type, D|B, RESET);
-		HAL_GPIO_WritePin(type, C|A, SET);
-		break;
-	case 6:
-		HAL_GPIO_WritePin(type, D|A, RESET);
-		HAL_GPIO_WritePin(type, B|C, SET);
-		break;
-	case 7:
-		HAL_GPIO_WritePin(type, D, RESET);
-		HAL_GPIO_WritePin(type, C|B|A, SET);
-		break;
-	case 8:
-		HAL_GPIO_WritePin(type, C|B|A, RESET);
-		HAL_GPIO_WritePin(type, D, SET);
-		break;
-	case 9:
-		HAL_GPIO_WritePin(type, C|B, RESET);
-		HAL_GPIO_WritePin(type, D|A, SET);
-		break;
-	default:
-		HAL_GPIO_WritePin(type, D|C|B|A, SET);
-		break;
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, RESET);//GREEN1
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, RESET);//GREEN2
+}
+void led_red_green(){
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, SET);//RED1
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, SET);//GREEN2
+}
+void led_red_amber(){
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, SET);//RED1
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, SET);//YEL2
+}
+void led_green_red(){
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, SET);//RED2
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, SET);//GREEN1
+}
+void led_amber_red(){
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, SET);//RED2
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, SET);//YEL1
+}
+void init_traffic_light(){
+	setTimer(1, 100);
+
+	clearAllLed();
+	led_red_green();
+	led_red_amber();
+}
+void controlTime_led(){
+	if(red <= 0)
+		red = temp_red;
+	if(green <= 0)
+		green = temp_green;
+	if(amber <= 0)
+		amber = temp_amber;
+}
+void blinkingLed(int mode){
+	switch(mode){
+		case MODE_2:
+			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_0);//RED1
+			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_1);//RED2
+			break;
+		case MODE_3:
+			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_2);//YEL1
+			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_3);//YEL2
+			break;
+		case MODE_4:
+			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);//GREEN1
+			HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_5);//GREEN2
+			break;
+		default: break;
 	}
 }
-
 
 
 
