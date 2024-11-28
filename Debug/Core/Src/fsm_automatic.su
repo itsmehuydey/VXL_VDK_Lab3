@@ -1,4 +1,2 @@
 fsm_automatic.c:10:6:run_traffic_light	8	static
-fsm_automatic.c:168:6:handleButtonPress	24	static
-fsm_automatic.c:180:6:handleTimerFlag0	24	static
-fsm_automatic.c:189:6:fsm_automatic	16	static
+fsm_automatic.c:16:6:fsm_automatic	16	static

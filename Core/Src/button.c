@@ -122,6 +122,7 @@ int isButtonLongPressed(int index){
 }
 
 void getKeyInput(){
+	static int longPressCounter[N0_OF_BUTTONS] = {0};
 	for(int i = 0; i < N0_OF_BUTTONS; i++){
 		KeyReg2[i] = KeyReg1[i];
 		KeyReg1[i] = KeyReg0[i];
@@ -148,7 +149,18 @@ void getKeyInput(){
 					if(KeyReg3[i] == PRESSED_STATE){
 						button_flag[i] = 1;
 					}
+					//else release
 				}
+			}
+			if(KeyReg3[i] == PRESSED_STATE){
+			  	longPressCounter[i]++;
+			  	if(longPressCounter[i] >= 200){
+			  		button_flag[i] = 1;
+			  		longPressCounter[i] = 190;
+			  	}
+			}
+			else {
+				longPressCounter[i] = 0;
 			}
 		}
 	}
