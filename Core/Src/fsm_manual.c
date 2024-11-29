@@ -62,7 +62,7 @@ void fsm_manual(){
 			}
 			if(isButtonPressed(1)){
 				status = MAN_GREEN_RED;
-				setTimer(1, 1000);
+				setTimer(1, 100);
 				clearAllLed();
 				red = 10;
 				green = 10;
@@ -96,7 +96,7 @@ void fsm_manual(){
 				status = MAN_AMBER_RED;
 				red = 10;
 				amber = 10;
-				setTimer(1, 1000);
+				setTimer(1, 100);
 				clearAllLed();
 				button_flag[1] = 0;
 			}
@@ -127,7 +127,7 @@ void fsm_manual(){
 			}
 			if(isButtonPressed(1)){
 				status = MAN_RED_GREEN;
-				setTimer(1, 1000);
+				setTimer(1, 100);
 				clearAllLed();
 				red = 10;
 				green = 10;

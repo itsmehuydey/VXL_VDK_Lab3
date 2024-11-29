@@ -23,8 +23,8 @@ void fsm_automatic(){
 	switch(status){
 		case INIT:
 			status = RED_GREEN;
-			setTimer(1, 100);//300
-			setTimer(0, 100);//0
+			setTimer(1, 300);//300
+			setTimer(0, 0);//0
 			clearAllLed();
 			red = max_red;
 			amber = max_amber;
